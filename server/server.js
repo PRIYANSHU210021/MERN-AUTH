@@ -3,13 +3,18 @@ import dotenv from "dotenv";
 import cors from "cors";
 import 'dotenv/config';
 import cookieParser from "cookie-parser";
+
 import connectDB from "./config/db.js";
 import authRouter from "./routes/authRoutes.js"
 
 const app = express();
 
+dotenv.config();
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // for form data
 app.use(cookieParser());
+
 app.use(cors({credentials:true}));
 
 app.get('/ping',(req,res)=>{

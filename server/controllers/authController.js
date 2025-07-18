@@ -100,7 +100,7 @@ export const logout = async (req, res) => {
 
 export const sendVerifyOtp = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const { userId } = req.body;        
         const user = await userModel.findById(userId);
 
         if (user.isAccountVerified) {
@@ -116,7 +116,7 @@ export const sendVerifyOtp = async (req, res) => {
 
         const mailOption = {
             from: process.env.SENDER_EMAIL,
-            to: email,
+            to: user.email,
             subject: 'Accout verification OTP',
             text: `Your OTP is ${otp}. Verify your account using this OTP` 
         }
@@ -125,13 +125,14 @@ export const sendVerifyOtp = async (req, res) => {
         res.json({success: true, message: 'Verification OTP Sent On Email'})
         
     } catch (error) {
-        res.json({ success: false, message: error.message })
+        res.json({ success: false, message: 'asdf'+error.message })
     }
 }
 
 export const verifyEmail = async (req,res) => {
         const {userId,otp} = req.body;
         if(!userId || !otp){
+            console.log("asdf")
             return  res.json({success:false, message: 'Missing Details'});
         }
         try {
