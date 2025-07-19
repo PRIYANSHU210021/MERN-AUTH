@@ -3,14 +3,15 @@ import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { AppContent } from '../context/AppContext';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Login = () => {
 
     const navigate = useNavigate();
 
-    const { backendUrl, setIsLoggedin } = useContext(AppContent)
+    const { backendUrl, setIsLoggedIn, getUserData } = useContext(AppContent)
 
-    const [state, setState] = useState('Sign Up')
+    const [state, setState] = useState('Log In')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -18,28 +19,31 @@ const Login = () => {
         try {
             e.preventDefault();
             axios.defaults.withCredentials = true;
-
             if (state === 'Sign Up') {
                 const { data } = await axios.post(backendUrl + '/api/auth/register', { name, email, password })
-
+                
                 if (data.success) {
-                    setIsLoggedin(true)
+                    setIsLoggedIn(true)
+                    getUserData();
                     navigate('/');
                 } else {
                     toast.error(data.message);
                 }
             } else {
-                const { data } = await axios.post(backendUrl + '/api/auth/login', {email, password })
-
+                const { data } = await axios.post(backendUrl + '/api/auth/login', { email, password })
+                
                 if (data.success) {
-                    setIsLoggedin(true)
+                    setIsLoggedIn(true)
+                    getUserData ();
                     navigate('/');
                 } else {
                     toast.error(data.message);
                 }
             }
         } catch (error) {
-            toast.error(data.message);
+            toast.error(
+                error.response?.data?.message || "Something went wrong. Please try again."
+            );
         }
     }
 
