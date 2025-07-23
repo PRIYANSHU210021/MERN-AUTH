@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import userModel from '../models/userModel.js';
 import transporter from '../config/nodemailer.js';
+import { EMAIL_VERIFY_TEMPLATE,PASSWORD_RESET_TEMPLATE } from '../config/emailTemplates.js';
 
 export const register = async (req, res) => {
     const { name, email, password } = req.body;
@@ -118,7 +119,8 @@ export const sendVerifyOtp = async (req, res) => {
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: 'Accout verification OTP',
-            text: `Your OTP is ${otp}. Verify your account using this OTP`
+            // text: `Your OTP is ${otp}. Verify your account using this OTP`
+            html: EMAIL_VERIFY_TEMPLATE.replace("{{otp}}",otp).replace("{{email}}",user.email)
         }
 
         await transporter.sendMail(mailOption)
@@ -188,17 +190,18 @@ export const sendResetOtp = async (req, res) => {
         const otp = String(Math.floor(100000 + Math.random() * 900000));
         user.resetOtp = otp;
         user.resetOtpExpireAt = Date.now() + 15 * 60 * 1000
-        console.log("h2")
+        // console.log("h2")
 
         await user.save();
-        console.log("h3")
+        // console.log("h3")
 
 
         const mailOption = {
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: 'Password Reset OTP',
-            text: `Your OTP for resetting your password is ${otp}. Use this OTP to proceed with resetting your password.`
+            // text: `Your OTP for resetting your password is ${otp}. Use this OTP to proceed with resetting your password.`
+            html: PASSWORD_RESET_TEMPLATE.replace("{{otp}}",otp).replace("{{email}}",user.email)
         };
 
         await transporter.sendMail(mailOption)
