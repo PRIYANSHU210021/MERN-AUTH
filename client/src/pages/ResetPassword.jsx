@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { AppContent } from '../context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { set } from 'mongoose';
 
 const ResetPassword = () => {
   

@@ -2,9 +2,12 @@ import React from 'react'
 import { assets } from '../assets/assets'
 import { AppContent } from '../context/AppContext'
 import { useContext } from 'react';
+import funnyCaptions from '../assets/funnyCaption';
 
 const Header = () => {
   const {userData} = useContext(AppContent);
+  const captions = funnyCaptions[Math.floor(Math.random() * funnyCaptions.length)];
+
   return (
     <div className='flex flex-col items-center mt-20 px-4 text-center text-gray-800'>
       <img src={assets.header_img} alt="" className='w-36 h-36 rounded-full mb-6'/>
@@ -15,7 +18,9 @@ const Header = () => {
       <h2 className='text-3xl sm:text-5xl font-semibold mb-4'>Thats Great You Are Front Of Me
       </h2>
 
-      <p className='mb-8 max-w-md'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta quo iste magnam enim alias, architecto nostrum! Dolor sapiente non harum voluptatibus illo?</p>
+      {/* <p className='mb-8 max-w-md'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta quo iste magnam enim alias, architecto nostrum! Dolor sapiente non harum voluptatibus illo?</p> */}
+      <p className='mb-8 max-w-md'>{captions}</p>
+      
       <button className='border border-gray-500 rounded-full px-8 py-2.5 hover:bg-gray-100 transition-all'>Ha Bhai! Suru Kare?</button>
     </div>
   )
